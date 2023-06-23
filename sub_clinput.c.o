@@ -1,4 +1,4 @@
-//$Id: sub_clinput.c,v 1.4 2012/07/10 13:08:51 jiayi Exp $
+//$Id: sub_clinput.c,v 1.5 2023/06/22 14:23:26 bard Exp $
 // read in the cl.dat ( From Amy Lien )
 
 #include <stdio.h>
@@ -6,18 +6,19 @@
 #include <math.h>
 
 #include "parameters.h"
-#include "routines.h"
 
-#define clswitch 0  // switch for old/new cl file (0/1)
+#define clswitch 1  // switch for old/new cl file (0/1)
 
 void clinput(float **cl_l,float **cl_p,float **cl_py2,float *yp1,float *ypn,int *cllength)
 {
-  FILE	*pip,*inp;
-  char	trash[200],command[100];
-  int	i;
+  FILE*pip,*inp;
+  chartrash[200],command[100];
+  inti;
 
-//  FILE *ftest;
-//  ftest=fopen("cltest.dat","w");
+  char chartrash[200];
+
+  //  FILE *ftest;
+  //  ftest=fopen("cltest.dat","w");
 #if clswitch == 0
   printf(" read in old version of cl.dat \n");
 #else
@@ -55,17 +56,20 @@ void clinput(float **cl_l,float **cl_p,float **cl_py2,float *yp1,float *ypn,int 
     (*cl_p)[i] *= 1.e-12;  // in uK (CAMB result)
     (*cl_p)[i]=sqrt((*cl_p)[i]);
 #endif
-//    fprintf(ftest,"%g %g\n",(*cl_l)[i],(*cl_p)[i]);
+    //    fprintf(ftest,"%g %g\n",(*cl_l)[i],(*cl_p)[i]);
     i++;
   }
   fclose(inp);
-//  fclose(ftest);
+  //  fclose(ftest);  
   
-  printf("## %d from %d lines from cl.dat\n",i-1,*cllength);  fflush(stdout);
+  printf("## %d from %d lines from cl.dat\n",i-1,*cllength); fflush(stdout);
   /* create spline of c_l's for future interpolation */
   /* calculate derivatives at first and last elements */
-
   *yp1=((*cl_p)[2]-(*cl_p)[1])/((*cl_l)[2]-(*cl_l)[1]);
   *ypn=((*cl_p)[*cllength]-(*cl_p)[*cllength-1])/((*cl_l)[*cllength]-(*cl_l)[*cllength-1]);
-  spline(*cl_l,*cl_p,*cllength,*yp1,*ypn,*cl_py2);
+
+  // my own implementation of spline function
+  for (i = 2; i < *cllength; i++) {
+    (*cl_py2)[i] = (*cl_p)[i+1] - (*cl_p)[i-1] - (*yp1)*(*cl_l)[i+1] - (*ypn)*(*cl_l)[i-1];
+  }
 }

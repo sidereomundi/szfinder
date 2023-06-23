@@ -3,7 +3,6 @@
 
 #include <math.h>
 #include <stdio.h>
-#include "nr.h"
 #include "structures.h"
 #include "parameters.h"
 #include "routines.h"

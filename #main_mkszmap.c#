@@ -1,4 +1,4 @@
-// $Id: main_mkszmap.c,v 1.6 2013/02/12 14:23:15 jiayi Exp $
+A// $Id: main_mkszmap.c,v 1.6 2013/02/12 14:23:15 jiayi Exp $
 // make mock sz map
 
 #include "fftw3.h"
@@ -53,7 +53,6 @@ int main(int argc, char *argv[])
   printf("# Input CMB \n");
   clinput(&cl_l,&cl_p,&cl_py2,&yp1,&ypn,&cllength);
   cmbimage = (float *)malloc(sizeof(float)*imap.npix);
-  printf("pixelsize %f\n",imap.pixsize);
   mkcmb(cllength,&rseed,&imap,cmbimage,cl_l,cl_p,cl_py2,yp1,ypn);
   saveimagef("cmb.fits",cmbimage,xdim,ydim);
   // 150 GHz

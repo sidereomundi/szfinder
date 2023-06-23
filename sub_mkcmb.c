@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "nr.h"
 #include "fftw3.h"
 #include "structures.h"
 #include "parameters.h"
@@ -29,7 +28,8 @@ void mkcmb(cllength,seed,imap,cmbmap,cl_l,cl_p,cl_py2,yp1,ypn)
   imsize=imap->nsidepix;
   pixsize=imap->pixsize;
   length=imap->npix;
-
+  printf("A: %f %f %f %f\n",imsize,imap->pixsize,length,imap->img);
+  
   pixsize*=M_PI/(180.0*60.0);
   /* create an array to hold the final image */
   //	printf(" Creating %d^2 single precision image template\n",imsize); 
@@ -64,8 +64,13 @@ void mkcmb(cllength,seed,imap,cmbmap,cl_l,cl_p,cl_py2,yp1,ypn)
       else dT=cl_p[cllength];
       /* get Gaussian random deviate using this dT */
       // normalize (imsize) and scaling (pixsize)
+      //      if (dT>0)
+      //	printf("%f\n",dT*1.e6);
       amplitude_r=dT*gasdev(seed)/sqrt(2.)/((float)imsize)/pixsize;
+      //      printf("A: %f %f %f %f %f \n",dT,gasdev(seed),sqrt(2.),(float)imsize,pixsize);
+      //      printf("B: %f\n",amplitude_r);
       amplitude_i=dT*gasdev(seed)/sqrt(2.)/((float)imsize)/pixsize;
+      //      printf("B: %f\n",gasdev(seed));
       amplitudes_r[loc]=amplitude_r;
       amplitudes_i[loc]=amplitude_i;
       /* set real component of Fourier mode */
